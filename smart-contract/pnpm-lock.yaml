@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@openzeppelin/contracts':
+        specifier: ^5.2.0
+        version: 5.2.0
       '@openzeppelin/contracts-upgradeable':
         specifier: 4.9.3
         version: 4.9.3
@@ -397,6 +400,9 @@ packages:
 
   '@openzeppelin/contracts-upgradeable@4.9.3':
     resolution: {integrity: sha512-jjaHAVRMrE4UuZNfDwjlLGDxTHWIOwTJS2ldnc278a0gevfXfPr8hxKEVBGFBE96kl2G3VHDZhUimw/+G3TG2A==, tarball: https://registry.npmjs.org/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-4.9.3.tgz}
+
+  '@openzeppelin/contracts@5.2.0':
+    resolution: {integrity: sha512-bxjNie5z89W1Ea0NZLZluFh8PrFNn9DH8DQlujEok2yjsOlraUPKID5p1Wk3qdNbf6XkQ1Os2RvfiHrrXLHWKA==, tarball: https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-5.2.0.tgz}
 
   '@scure/base@1.1.9':
     resolution: {integrity: sha512-8YKhl8GHiNI/pU2VMaofa2Tor7PJRAjwQLBBuilkJ9L5+13yVbC7JO/wS7piioAvPSwR3JKM1IJ/u4xQzbcXKg==, tarball: https://registry.npmjs.org/@scure/base/-/base-1.1.9.tgz}
@@ -2619,6 +2625,8 @@ snapshots:
       '@nomicfoundation/solidity-analyzer-win32-x64-msvc': 0.1.2
 
   '@openzeppelin/contracts-upgradeable@4.9.3': {}
+
+  '@openzeppelin/contracts@5.2.0': {}
 
   '@scure/base@1.1.9': {}
 

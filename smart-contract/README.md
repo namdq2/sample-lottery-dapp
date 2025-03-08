@@ -37,10 +37,10 @@ To deploy the DLottery contract using Hardhat Ignition:
 npx hardhat node
 
 # Deploy to local network
-npx hardhat run scripts/deploy.ts --network localhost
+npx hardhat run scripts/dlottery-deploy.ts --network localhost
 
 # Deploy to testnet (e.g., Sepolia)
-npx hardhat run scripts/deploy.ts --network sepolia
+npx hardhat run scripts/dlottery-deploy.ts --network sepolia
 ```
 
 The deployment script will output important addresses - make sure to save them:
@@ -55,7 +55,7 @@ When you need to update the contract logic:
 2. Compile the updated contract
 3. Run the upgrade script:
 ```
-PROXY_ADDRESS=<saved-proxy-address> PROXY_ADMIN_ADDRESS=<saved-admin-address> npx hardhat run scripts/upgrade.ts --network <your-network>
+PROXY_ADDRESS=<saved-proxy-address> PROXY_ADMIN_ADDRESS=<saved-admin-address> npx hardhat run scripts/dlottery-upgrade.ts --network <your-network>
 ```
 
 ## Using the Contract

@@ -1,4 +1,5 @@
 import hre from "hardhat";
+import DLotteryUpgradeModule from "../ignition/modules/DLotteryUpgrade";
 
 async function main() {
   console.log("Upgrading DLottery contract...");
@@ -13,7 +14,7 @@ async function main() {
   }
 
   try {
-    const ignition = await hre.ignition.deploy("DLotteryUpgradeModule", {
+    const ignition = await hre.ignition.deploy(DLotteryUpgradeModule, {
       parameters: {
         proxyAddress,
         proxyAdminAddress

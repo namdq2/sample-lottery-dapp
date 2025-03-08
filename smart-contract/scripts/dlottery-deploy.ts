@@ -1,5 +1,6 @@
 import { ethers } from "hardhat";
 import hre from "hardhat";
+import DLotteryModule from "../ignition/modules/DLottery";
 
 async function main() {
   console.log("Deploying DLottery contract...");
@@ -9,7 +10,7 @@ async function main() {
   console.log(`Deploying with account: ${deployer.address}`);
   
   try {
-    const ignition = await hre.ignition.deploy("DLotteryModule", {
+    const ignition = await hre.ignition.deploy(DLotteryModule, {
       parameters: { 
         owner: deployer.address 
       }

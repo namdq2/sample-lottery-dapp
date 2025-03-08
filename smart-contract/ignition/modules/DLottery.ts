@@ -6,12 +6,12 @@ const DLotteryModule = buildModule("DLotteryModule", (m) => {
   // Deploy implementation contract
   const dLotteryImplementation = m.contract("DLottery");
 
-  // Deploy proxy admin
-  const proxyAdmin = m.contract("@openzeppelin/contracts/proxy/transparent/ProxyAdmin", []);
+  // Deploy proxy admin - use the proper artifact name
+  const proxyAdmin = m.contract("ProxyAdmin", []);
 
   // Deploy proxy with implementation
   const proxy = m.contract(
-    "@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy",
+    "TransparentUpgradeableProxy",
     [
       dLotteryImplementation,
       proxyAdmin,
