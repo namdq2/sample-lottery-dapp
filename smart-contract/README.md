@@ -18,9 +18,9 @@ The project uses a three-contract architecture for upgradeability:
 - ProxyAdmin Contract: Manages the upgrade process securely
 
 ## Development
-```
+```shell
 # Install dependencies
-npm install
+pnpm install
 
 # Compile contracts
 npx hardhat compile
@@ -31,8 +31,8 @@ npx hardhat test
 
 ## Deployment
 ### Initial Deployment
-To deploy the DLottery contract using Hardhat Ignition:
-```
+To deploy the DLottery contract using OpenZeppelin Upgrades:
+```shell
 # Start a local node (in a separate terminal)
 npx hardhat node
 
@@ -45,7 +45,7 @@ npx hardhat run scripts/dlottery-deploy.ts --network sepolia
 
 The deployment script will output important addresses - make sure to save them:
 - PROXY_ADDRESS: The address users will interact with
-- PROXY_ADMIN_ADDRESS: The address that controls upgrades
+- PROXY_ADMIN_ADDRESS: The address admin will interact with for upgrade operations
 - IMPLEMENTATION_ADDRESS: The address of the current logic contract
 
 ### Upgrading the Contract
@@ -54,8 +54,8 @@ When you need to update the contract logic:
 1. Make changes to the DLottery.sol file
 2. Compile the updated contract
 3. Run the upgrade script:
-```
-PROXY_ADDRESS=<saved-proxy-address> PROXY_ADMIN_ADDRESS=<saved-admin-address> npx hardhat run scripts/dlottery-upgrade.ts --network <your-network>
+```shell
+PROXY_ADDRESS=<saved-proxy-address> npx hardhat run scripts/upgrade-dlottery.ts --network <your-network>
 ```
 
 ## Using the Contract
@@ -71,7 +71,7 @@ After deployment:
 
 ## Verification
 To verify the contract on Etherscan:
-```
+```shell
 npx hardhat verify --network <network> <implementation-address>
 ```
 
