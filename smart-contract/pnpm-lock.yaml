@@ -67,7 +67,7 @@ importers:
         specifier: ^1.0.8
         version: 1.0.10(hardhat@2.22.19(ts-node@10.9.2(@types/node@22.13.10)(typescript@5.8.2))(typescript@5.8.2))
       solidity-coverage:
-        specifier: ^0.8.0
+        specifier: ^0.8.14
         version: 0.8.14(hardhat@2.22.19(ts-node@10.9.2(@types/node@22.13.10)(typescript@5.8.2))(typescript@5.8.2))
       ts-node:
         specifier: '>=8.0.0'

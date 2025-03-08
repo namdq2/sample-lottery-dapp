@@ -154,8 +154,8 @@ contract DLottery is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeab
         uint256 prize = currentPrize;
         currentPrize = 0;
 
-        // Prepare for next lottery
-        drawId++;
+        // Increment drawId for the next lottery
+        drawId += 1;
 
         // Transfer the prize
         (bool sent,) = payable(msg.sender).call{value: prize}("");
