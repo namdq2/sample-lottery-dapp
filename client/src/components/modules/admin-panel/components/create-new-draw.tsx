@@ -26,6 +26,8 @@ const CreateNewDraw = () => {
     useDlottery();
   const { setDrawDate, setDrawDateData, setDrawDateError, isSettingDrawDate } =
     useDlottery();
+  const { performDraw, performDrawData, performDrawError, isPerformingDraw } =
+    useDlottery();
 
   const handleUploadPrize = async () => {
     try {
@@ -48,6 +50,26 @@ const CreateNewDraw = () => {
       alert("Failed to set draw time. See console for details.");
     }
   };
+
+  const handlePerformDraw = async () => {
+    try {
+      console.log("performDraw");
+      performDraw();
+    } catch (error) {
+      console.error("Error performing draw:", error);
+      alert("Failed to perform draw. See console for details.");
+    }
+  };
+
+  useEffect(() => {
+    if (performDrawData) {
+      alert("Draw performed successfully!");
+    }
+    if (performDrawError) {
+      console.error("Error performing draw:", performDrawError);
+      alert("Failed to perform draw.");
+    }
+  }, [performDrawData, performDrawError]);
 
   useEffect(() => {
     if (setDrawDateData) {
@@ -89,8 +111,8 @@ const CreateNewDraw = () => {
               onClick={handleUploadPrize}
               disabled={
                 isUploadingPrize ||
-                (!currentDrawInfo?.completed &&
-                  Number(currentDrawInfo?.prize) >= 0)
+                !(!currentDrawInfo?.completed &&
+                  Number(currentDrawInfo?.prize) == 0)
               }
             >
               {isUploadingPrize ? "Uploading..." : "Upload Prize"}
@@ -100,16 +122,24 @@ const CreateNewDraw = () => {
               onClick={handleSetDrawTime}
               disabled={
                 isSettingDrawDate ||
-                (!currentDrawInfo?.completed &&
+                !(!currentDrawInfo?.completed &&
                   Number(currentDrawInfo?.prize) > 0 &&
-                  currentDrawInfo?.drawTime !== null)
+                  currentDrawInfo?.drawTime === null)
               }
             >
               Set Date Next Draw
             </Button>
             <Button
               className="bg-gray-400 hover:bg-gray-600 text-gray-900"
-              disabled
+              onClick={handlePerformDraw}
+              disabled={
+                isPerformingDraw ||
+                !(
+                  !currentDrawInfo?.completed &&
+                  Number(currentDrawInfo?.prize) > 0 &&
+                  (currentDrawInfo?.drawTime?.getTime() || 0) < Date.now()
+                )
+              }
             >
               Perform Draw
             </Button>
