@@ -6,8 +6,9 @@ import type { Metadata, Viewport } from "next";
 import { ToastContainer } from "react-toastify";
 import { WagmiProvider } from "wagmi";
 import { wagmiConfig } from "../../wagmi-config";
-import "./globals.css";
 import Providers from "./providers";
+import "./globals.css";
+import "./custom.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.appUrl),
@@ -63,16 +64,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         suppressHydrationWarning
         className={cn(
-          "min-h-screen bg-background font-sans antialiased bg-[#f9fafb]",
+          "min-h-screen bg-background font-sans antialiased",
           fontSans.variable,
           fontMono.variable
         )}
       >
         <WagmiProvider config={wagmiConfig}>
-          <Providers>
-            <Header />
-            {children}
-          </Providers>
+          <Providers>{children}</Providers>
         </WagmiProvider>
         <ToastContainer />
       </body>

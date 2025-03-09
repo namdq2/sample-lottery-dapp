@@ -42,14 +42,14 @@ const CreateNewDraw = () => {
 
           <div className="flex gap-3 items-center">
             <Input
-              className="w-44"
+              className="w-44 text-white"
               type="number"
               min={0}
               step="0.01"
               defaultValue={0.01}
               placeholder="Prize amount in ETH"
             />
-            <span className="text-gray-500 font-semibold">ETH</span>
+            <span className="text-gray-300 font-semibold">ETH</span>
           </div>
         </div>
       )}

@@ -44,15 +44,15 @@ const TicketList = () => {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">TICKET</TableHead>
-          <TableHead className="text-right">WALLET ADDRESS</TableHead>
+          <TableHead className="w-[100px] text-white">TICKET</TableHead>
+          <TableHead className="text-right text-white">WALLET ADDRESS</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {tickets.map((ticket) => (
           <TableRow key={ticket.ticketId}>
-            <TableCell className="font-medium">{ticket.ticketId}</TableCell>
-            <TableCell className="text-right">{ticket.walletAddress}</TableCell>
+            <TableCell className="font-medium text-white">{ticket.ticketId}</TableCell>
+            <TableCell className="text-right text-white">{ticket.walletAddress}</TableCell>
           </TableRow>
         ))}
       </TableBody>
