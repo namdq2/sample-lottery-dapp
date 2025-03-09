@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "../../ui/button";
 import TicketList from "./components/ticket-list";
+import Timer from "./components/timer";
 
 const NextLotteryDraw = () => {
   return (
@@ -16,14 +17,12 @@ const NextLotteryDraw = () => {
           <div className="font-bold text-base text-gray-400">
             Draw Date: March 15, 2025 18:00 UTC
           </div>
-          <div className="font-bold text-lg text-[#4f46e5] text-end max-sm:text-start">
-            23:59:59
-          </div>
+          <Timer/>
         </div>
       </div>
 
       <div className="flex flex-col gap-4">
-        <Button className="bg-[#4f46e5] hover:bg-[#342db6] w-fit">
+        <Button className="bg-[#091818] border border-[#036756] hover:bg-[#059669] w-fit">
           Participate to next draw
         </Button>
 
