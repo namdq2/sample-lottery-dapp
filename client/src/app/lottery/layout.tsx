@@ -4,7 +4,7 @@ type LotteryLayoutProps = Readonly<{ children: React.ReactNode }>;
 
 const LotteryLayout = ({ children }: LotteryLayoutProps) => {
   return (
-    <div className="bg-[#091818]">
+    <div className="bg-[#0a0f1e]">
       <Header />
       {children}
     </div>

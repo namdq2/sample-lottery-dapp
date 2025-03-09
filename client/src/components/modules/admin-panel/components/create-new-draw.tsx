@@ -91,7 +91,7 @@ const CreateNewDraw = () => {
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap gap-4">
         <Button
-          className="bg-[#091818] border border-[#036756] hover:bg-[#059669] w-32 h-32 whitespace-normal flex flex-col"
+          className="border border-[#4f46e5] bg-transparent hover:bg-[#342db6] w-32 h-32 whitespace-normal flex flex-col"
           disabled={!address || isCreatingDraw}
           onClick={() => {
             setIsCreatingDraw(true);
@@ -104,7 +104,7 @@ const CreateNewDraw = () => {
         {isCreatingDraw && (
           <>
             <Button
-              className="bg-[#091818] border border-[#036756] hover:bg-[#059669] w-32 h-32 flex flex-col"
+              className="bg-transparent hover:bg-[#342db6] border border-[#4f46e5] w-32 h-32 flex flex-col"
               onClick={handleUploadPrize}
               disabled={
                 isUploadingPrize ||
@@ -121,7 +121,7 @@ const CreateNewDraw = () => {
               {isUploadingPrize ? "Uploading..." : "Upload Prize"}
             </Button>
             <Button
-              className="bg-[#091818] border border-[#036756] hover:bg-[#059669] w-32 h-32 whitespace-normal flex flex-col"
+              className="bg-transparent hover:bg-[#342db6] border border-[#4f46e5] w-32 h-32 whitespace-normal flex flex-col"
               onClick={handleSetDrawTime}
               disabled={
                 isSettingDrawDate ||
@@ -136,7 +136,7 @@ const CreateNewDraw = () => {
               Set Date Next Draw
             </Button>
             <Button
-              className="bg-[#091818] border border-[#036756] hover:bg-[#059669] w-32 h-32 flex flex-col"
+              className="bg-transparent hover:bg-[#342db6] border border-[#4f46e5] w-32 h-32 flex flex-col"
               onClick={handlePerformDraw}
               disabled={
                 isPerformingDraw ||

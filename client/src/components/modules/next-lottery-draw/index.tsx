@@ -101,7 +101,7 @@ const NextLotteryDraw = () => {
   }
 
   return (
-    <div className="bg-[#091818] border border-[#0d2925] rounded-lg p-5">
+    <div className="border border-[#0d2925] rounded-lg p-5">
       <div className="flex justify-between mb-5 max-sm:flex-col">
         <div>
           <div className="font-bold text-lg text-white">Next Lottery Draw</div>
@@ -124,7 +124,7 @@ const NextLotteryDraw = () => {
 
       <div className="flex flex-col gap-4">
         <Button
-          className="bg-[#091818] border border-[#036756] hover:bg-[#059669] w-fit"
+          className="bg-transparent border border-[#4f46e5] hover:bg-[#342db6] w-fit"
           onClick={handleParticipate}
           disabled={
             isParticipating ||
