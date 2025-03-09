@@ -55,7 +55,7 @@ When you need to update the contract logic:
 2. Compile the updated contract
 3. Run the upgrade script:
 ```shell
-PROXY_ADDRESS=<saved-proxy-address> npx hardhat run scripts/upgrade-dlottery.ts --network <your-network>
+PROXY_ADDRESS=<saved-proxy-address> npx hardhat run scripts/dlottery-upgrade.ts --network <your-network>
 ```
 
 ## Using the Contract
@@ -106,3 +106,11 @@ DLottery deployed successfully!
 Proxy address: 0x9AF48f6cA9B855DEa4b0468a0390b12A051888Ea
 Implementation address: 0x6a76d5479A336605e4Cab2B5e877591d7c2A1B06
 Proxy admin address: 0x2a3a21CCdf016736Cb6e903caF1252504209A8E3
+
+
+upgrade.ts --network  amoyTestnet
+Compiled 1 Solidity file successfully (evm target: paris).
+Upgrading DLottery contract...
+Upgrading proxy at 0x5E28E9Fc57339291c494796186B40aA369Dd9E9b...
+DLottery upgraded successfully!
+New implementation address: 0x6a76d5479A336605e4Cab2B5e877591d7c2A1B06

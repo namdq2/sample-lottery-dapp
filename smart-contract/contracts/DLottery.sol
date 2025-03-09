@@ -5,18 +5,21 @@ pragma solidity ^0.8.28;
 import "@openzeppelin/contracts/proxy/transparent/ProxyAdmin.sol";
 import "@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
 
-
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 
-
 /**
  * @title DLottery
  * @dev A decentralized lottery system with upgradeability
  */
-contract DLottery is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable, PausableUpgradeable {
+contract DLottery is
+    Initializable,
+    OwnableUpgradeable,
+    ReentrancyGuardUpgradeable,
+    PausableUpgradeable
+{
     // State variables
     uint256 private drawId;
     uint256 private nextDrawTimestamp;
@@ -38,9 +41,21 @@ contract DLottery is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeab
 
     // Events
     event DrawCreated(uint256 indexed drawId, uint256 prize, uint256 drawTime);
-    event ParticipantRegistered(uint256 indexed drawId, address participant, uint8 ticketNumber);
-    event DrawResult(uint256 indexed drawId, uint8 winningTicket, address winner);
-    event PrizeWithdrawn(uint256 indexed drawId, address winner, uint256 amount);
+    event ParticipantRegistered(
+        uint256 indexed drawId,
+        address participant,
+        uint8 ticketNumber
+    );
+    event DrawResult(
+        uint256 indexed drawId,
+        uint8 winningTicket,
+        address winner
+    );
+    event PrizeWithdrawn(
+        uint256 indexed drawId,
+        address winner,
+        uint256 amount
+    );
     event NewLotteryStarted(uint256 indexed drawId);
 
     /// @custom:oz-upgrades-unsafe-allow constructor
@@ -52,7 +67,7 @@ contract DLottery is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeab
         __Ownable_init();
         __ReentrancyGuard_init();
         __Pausable_init();
-        
+
         // Transfer ownership to initialOwner after initialization
         _transferOwnership(initialOwner);
 
@@ -89,9 +104,12 @@ contract DLottery is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeab
     // }
 
     function uploadPrize() external payable onlyOwner {
-        require(drawCompleted || currentPrize == 0, "Active lottery with prize already set");
+        require(
+            drawCompleted || currentPrize == 0,
+            "Active lottery with prize already set"
+        );
         require(msg.value > 0, "Prize amount must be greater than 0");
-        
+
         // Reset lottery state
         nextDrawTimestamp = 0;
         currentPrize = msg.value;
@@ -146,7 +164,10 @@ contract DLottery is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeab
     function participate() external whenNotPaused {
         require(!drawCompleted, "No active lottery");
         require(nextDrawTimestamp > 0, "Draw not configured yet");
-        require(block.timestamp < nextDrawTimestamp, "Registration period ended");
+        require(
+            block.timestamp < nextDrawTimestamp,
+            "Registration period ended"
+        );
         require(!isParticipant[msg.sender], "Already registered");
         require(availableTickets.length > 0, "No tickets available");
 
@@ -155,7 +176,9 @@ contract DLottery is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeab
         uint8 ticketNumber = availableTickets[randomIndex];
 
         // Remove the selected ticket from available tickets
-        availableTickets[randomIndex] = availableTickets[availableTickets.length - 1];
+        availableTickets[randomIndex] = availableTickets[
+            availableTickets.length - 1
+        ];
         availableTickets.pop();
 
         // Register the participant
@@ -177,7 +200,7 @@ contract DLottery is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeab
         drawId += 1;
 
         // Transfer the prize
-        (bool sent,) = payable(msg.sender).call{value: prize}("");
+        (bool sent, ) = payable(msg.sender).call{value: prize}("");
         require(sent, "Failed to send prize");
 
         emit PrizeWithdrawn(drawId - 1, msg.sender, prize);
@@ -185,19 +208,57 @@ contract DLottery is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeab
 
     // View functions
 
-    function getCurrentDrawInfo() external view returns (
-        uint256 _drawId,
-        uint256 _prize,
-        uint256 _drawTime,
-        bool _completed,
-        address _winner
-    ) {
+    function getCurrentDrawInfo()
+        external
+        view
+        returns (
+            uint256 _drawId,
+            uint256 _prize,
+            uint256 _drawTime,
+            bool _completed,
+            address _winner
+        )
+    {
         return (drawId, currentPrize, nextDrawTimestamp, drawCompleted, winner);
     }
 
-    function getTicketInfo(uint8 ticket) external view returns (address participant) {
-        require(ticket > 0 && ticket <= MAX_PARTICIPANTS, "Invalid ticket number");
+    function getTicketInfo(
+        uint8 ticket
+    ) external view returns (address participant) {
+        require(
+            ticket > 0 && ticket <= MAX_PARTICIPANTS,
+            "Invalid ticket number"
+        );
         return ticketToParticipant[ticket];
+    }
+
+    function getPaidTickets()
+        external
+        view
+        returns (uint8[] memory tickets, address[] memory participants)
+    {
+        uint8 count = 0;
+
+        // Count valid tickets first (single pass)
+        for (uint8 i = 1; i <= MAX_PARTICIPANTS; i++) {
+            if (ticketToParticipant[i] != address(0)) {
+                count++;
+            }
+        }
+
+        // Allocate arrays of exact size needed
+        tickets = new uint8[](count);
+        participants = new address[](count);
+
+        // Fill arrays (second pass)
+        uint8 index = 0;
+        for (uint8 i = 1; i <= MAX_PARTICIPANTS; i++) {
+            if (ticketToParticipant[i] != address(0)) {
+                tickets[index] = i;
+                participants[index] = ticketToParticipant[i];
+                index++;
+            }
+        }
     }
 
     function getRemainingTickets() external view returns (uint256) {
@@ -220,11 +281,16 @@ contract DLottery is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeab
     // Internal functions
 
     function _getRandomNumber() internal view returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(
-            block.timestamp,
-            block.prevrandao,
-            msg.sender
-        )));
+        return
+            uint256(
+                keccak256(
+                    abi.encodePacked(
+                        block.timestamp,
+                        block.prevrandao,
+                        msg.sender
+                    )
+                )
+            );
     }
 
     function _getRandomTicket() internal view returns (uint8) {

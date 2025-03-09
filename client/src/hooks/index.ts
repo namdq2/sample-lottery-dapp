@@ -1,1 +1,2 @@
-export * from './useDlottery';
+export * from "./useTickets";
+export * from "./useDlottery";
