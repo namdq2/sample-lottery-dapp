@@ -55,7 +55,7 @@ When you need to update the contract logic:
 2. Compile the updated contract
 3. Run the upgrade script:
 ```shell
-PROXY_ADDRESS=<saved-proxy-address> npx hardhat run scripts/upgrade-dlottery.ts --network <your-network>
+PROXY_ADDRESS=<saved-proxy-address> npx hardhat run scripts/dlottery-upgrade.ts --network <your-network>
 ```
 
 ## Using the Contract
@@ -76,3 +76,41 @@ npx hardhat verify --network <network> <implementation-address>
 ```
 
 Note: Only the implementation contract needs verification, as the proxy is a standard OpenZeppelin contract.
+
+
+```
+Deploying DLottery contract...
+Deploying with account: 0xd79Dc6Eeeb004cEebA6A1f6490B6d637d428Fec9
+Deploying proxy...
+DLottery deployed successfully!
+Proxy address: 0xeE4A0335bCC0C92Ae27eE00E579aa812a887D2A7
+Implementation address: 0xCbe78Abb561f4e2947bf839152bc5149e62e6347
+Proxy admin address: 0xDd9a9D9D3Ee0926C6F07B8cF54eCC73e2AA3Fa22
+```
+
+
+Compiled 1 Solidity file successfully (evm target: paris).
+Deploying DLottery contract...
+Deploying with account: 0xd79Dc6Eeeb004cEebA6A1f6490B6d637d428Fec9
+Deploying proxy...
+DLottery deployed successfully!
+Proxy address: 0x5E28E9Fc57339291c494796186B40aA369Dd9E9b
+Implementation address: 0x6a76d5479A336605e4Cab2B5e877591d7c2A1B06
+Proxy admin address: 0xeC393F221280CCED7F379C36FF9396A490F11808
+
+
+Deploying DLottery contract...
+Deploying with account: 0xd79Dc6Eeeb004cEebA6A1f6490B6d637d428Fec9
+Deploying proxy...
+DLottery deployed successfully!
+Proxy address: 0x9AF48f6cA9B855DEa4b0468a0390b12A051888Ea
+Implementation address: 0x6a76d5479A336605e4Cab2B5e877591d7c2A1B06
+Proxy admin address: 0x2a3a21CCdf016736Cb6e903caF1252504209A8E3
+
+
+upgrade.ts --network  amoyTestnet
+Compiled 1 Solidity file successfully (evm target: paris).
+Upgrading DLottery contract...
+Upgrading proxy at 0x5E28E9Fc57339291c494796186B40aA369Dd9E9b...
+DLottery upgraded successfully!
+New implementation address: 0x6a76d5479A336605e4Cab2B5e877591d7c2A1B06

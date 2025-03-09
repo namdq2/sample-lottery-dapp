@@ -3,6 +3,10 @@ import "@nomicfoundation/hardhat-toolbox";
 import '@openzeppelin/hardhat-upgrades';
 import 'solidity-coverage';
 
+import * as dotenv from "dotenv";
+
+dotenv.config();
+
 const config: HardhatUserConfig = {
   solidity: {
     version: "0.8.28",
@@ -13,7 +17,16 @@ const config: HardhatUserConfig = {
       }
     }
   },
+  etherscan: {
+    apiKey: {
+      polygonAmoy: "1J27863SDJUGBI6EVCISJY69M44NC3KKEI"
+    }
+  },
   networks: {
+    amoyTestnet: {
+      url: process.env.AMOY_RPC_URL || "https://rpc-amoy.polygon.technology",
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+    },
     localhost: {
       url: "http://127.0.0.1:8545"
     },
