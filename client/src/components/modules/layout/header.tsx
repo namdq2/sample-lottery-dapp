@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect } from "react";
-import Image from "next/image";
-import lotteryLogo from "@/assets/images/lottery-logo.png";
 import { Button } from "@/components/ui/button";
 import MenuIcon from "@/components/icons/menu-icon";
 import { useAccount, useDisconnect } from "wagmi";
@@ -20,9 +18,8 @@ const Header = () => {
   }, [address])
 
   return (
-    <div className="border-b border-b-[#0a1f1c] h-fit flex justify-between items-center py-2 px-14 bg-[#091818]">
+    <div className="border-b border-b-[#0a1f1c] h-fit flex justify-between items-center py-2 px-14">
       <div className="leading-8 font-extrabold text-xl flex items-center gap-2">
-        <Image src={lotteryLogo} width={50} height={50} alt="lottery-logo" />
         <div>
           <span className="text-white">DLottery</span>
           <div className="text-base font-medium w-36 truncate text-[#036756]" title={address}>User: {address}</div>
