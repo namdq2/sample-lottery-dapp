@@ -14,10 +14,12 @@ const Lottery = () => {
           Last Winner: {winnerAddress}, Previous Winnings: {winningValue} MATIC
         </div>
       </div>
-      <div className="px-14 py-8 flex flex-col gap-5">
-        <AdminPanel />
-        <NextLotteryDraw />
-        <PreviousDraw />
+      <div className="container mx-auto px-4 md:px-6 max-w-7xl">
+        <div className="px-14 py-8 flex flex-col gap-5">
+          <AdminPanel />
+          <NextLotteryDraw />
+          <PreviousDraw />
+        </div>
       </div>
     </div>
   );
