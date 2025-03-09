@@ -111,8 +111,13 @@ const CreateNewDraw = () => {
               onClick={handleUploadPrize}
               disabled={
                 isUploadingPrize ||
-                !(!currentDrawInfo?.completed &&
-                  Number(currentDrawInfo?.prize) == 0)
+                !(
+                  (!currentDrawInfo?.completed &&
+                    Number(currentDrawInfo?.prize) == 0) ||
+                  (currentDrawInfo?.completed &&
+                    currentDrawInfo?.winner ==
+                      "0x0000000000000000000000000000000000000000")
+                )
               }
             >
               {isUploadingPrize ? "Uploading..." : "Upload Prize"}
@@ -122,9 +127,11 @@ const CreateNewDraw = () => {
               onClick={handleSetDrawTime}
               disabled={
                 isSettingDrawDate ||
-                !(!currentDrawInfo?.completed &&
+                !(
+                  !currentDrawInfo?.completed &&
                   Number(currentDrawInfo?.prize) > 0 &&
-                  currentDrawInfo?.drawTime === null)
+                  currentDrawInfo?.drawTime === null
+                )
               }
             >
               Set Date Next Draw

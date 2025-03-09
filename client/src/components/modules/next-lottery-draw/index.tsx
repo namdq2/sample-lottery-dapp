@@ -49,10 +49,10 @@ const NextLotteryDraw = () => {
   }, [currentDrawInfo]);
 
   // Format the countdown for display
-  const formattedCountdown = !currentDrawInfo?.drawTime
+  const formattedCountdown = currentDrawInfo?.completed
+    ? null
+    : !currentDrawInfo?.drawTime
     ? "Not scheduled"
-    : currentDrawInfo.completed
-    ? "Completed"
     : `${countdown.days > 0 ? `${countdown.days}d ` : ""}${String(
         countdown.hours
       ).padStart(2, "0")}:${String(countdown.minutes).padStart(
@@ -60,19 +60,34 @@ const NextLotteryDraw = () => {
         "0"
       )}:${String(countdown.seconds).padStart(2, "0")}`;
 
+  const formattedNextDrawDate = currentDrawInfo?.completed
+    ? "Coming soon!"
+    : currentDrawInfo?.drawTime?.toUTCString() || "Not scheduled";
+
+  const formattedPrize = currentDrawInfo?.completed
+    ? ""
+    : "Prize: " + currentDrawInfo?.prize + " ETH" || "Prize: 0 POL";
+
+  if (currentDrawInfo?.completed) {
+    return (
+      <div className="bg-white rounded-lg p-5">
+        <div className="font-bold text-lg">No upcoming draws</div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-lg p-5">
       <div className="flex justify-between mb-5 max-sm:flex-col">
         <div>
           <div className="font-bold text-lg">Next Lottery Draw</div>
           <div className="font-bold text-base text-gray-500">
-            Prize: {currentDrawInfo?.prize || "0"} ETH
+            {formattedPrize}
           </div>
         </div>
         <div>
           <div className="font-bold text-base text-gray-500 ">
-            Draw Date:{" "}
-            {currentDrawInfo?.drawTime?.toDateString() || "Not scheduled"}
+            Draw Date: {formattedNextDrawDate}
           </div>
           <div className="font-bold text-lg text-[#4f46e5] text-end max-sm:text-start">
             {formattedCountdown}
@@ -81,7 +96,14 @@ const NextLotteryDraw = () => {
       </div>
 
       <div className="flex flex-col gap-4">
-        <Button className="bg-[#4f46e5] hover:bg-[#342db6] w-fit">
+        <Button
+          className="bg-[#4f46e5] hover:bg-[#342db6] w-fit"
+          disabled={
+            !(!currentDrawInfo?.completed &&
+              Number(currentDrawInfo?.prize) >= 0 &&
+              (currentDrawInfo?.drawTime?.getTime() || 0) > Date.now())
+          }
+        >
           Participate to next draw
         </Button>
 
