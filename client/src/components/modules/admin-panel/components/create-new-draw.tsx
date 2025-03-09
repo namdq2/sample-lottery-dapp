@@ -15,13 +15,6 @@ const CreateNewDraw = () => {
   const chainId = useChainId();
   const { currentOwner, currentDrawInfo } = useDlottery();
 
-  console.log("currentOwner", currentOwner);
-  console.log("chainId", chainId);
-  console.log("currentDrawInfo", currentDrawInfo);
-  console.log("prize", prize);
-  console.log("drawTime", drawTime);
-  console.log("drawTimeTimestamp", new Date(drawTime).getTime() / 1000);
-
   const { uploadPrize, uploadPrizeData, uploadPrizeError, isUploadingPrize } =
     useDlottery();
   const { setDrawDate, setDrawDateData, setDrawDateError, isSettingDrawDate } =
@@ -169,10 +162,10 @@ const CreateNewDraw = () => {
             </div>
           )}
 
-          {!(
+          {(
             !currentDrawInfo?.completed &&
             Number(currentDrawInfo?.prize) > 0 &&
-            currentDrawInfo?.drawTime !== null
+            currentDrawInfo?.drawTime === null
           ) && (
             <div className="flex gap-3 items-center">
               <Input
