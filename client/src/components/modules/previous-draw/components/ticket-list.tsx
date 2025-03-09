@@ -46,19 +46,19 @@ const TicketList = () => {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">DRAW ID</TableHead>
-          <TableHead className="text-right">DATEW</TableHead>
-          <TableHead className="text-right">PRIZE</TableHead>
-          <TableHead className="text-right">WINNER</TableHead>
+          <TableHead className="text-white w-[100px]">DRAW ID</TableHead>
+          <TableHead className="text-white text-right">DATEW</TableHead>
+          <TableHead className="text-white text-right">PRIZE</TableHead>
+          <TableHead className="text-white text-right">WINNER</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {lotteryData.map((item) => (
           <TableRow key={item.id}>
-            <TableCell className="font-medium">{item.id}</TableCell>
-            <TableCell className="text-right">{item.date}</TableCell>
-            <TableCell className="text-right">{item.prize}</TableCell>
-            <TableCell className="text-right">{item.winner}</TableCell>
+            <TableCell className="text-white font-medium">{item.id}</TableCell>
+            <TableCell className="text-white text-right">{item.date}</TableCell>
+            <TableCell className="text-white text-right">{item.prize}</TableCell>
+            <TableCell className="text-white text-right">{item.winner}</TableCell>
           </TableRow>
         ))}
       </TableBody>

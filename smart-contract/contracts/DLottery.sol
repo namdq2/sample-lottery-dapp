@@ -62,12 +62,39 @@ contract DLottery is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeab
 
     // Admin functions
 
-    function startNewLottery() external onlyOwner {
-        require(drawCompleted, "Previous lottery still in progress");
+    // function startNewLottery() external onlyOwner {
+    //     require(drawCompleted, "Previous lottery still in progress");
 
+    //     // Reset lottery state
+    //     nextDrawTimestamp = 0;
+    //     currentPrize = 0;
+    //     drawCompleted = false;
+    //     winner = address(0);
+
+    //     // Reset participant tracking
+    //     for (uint8 i = 1; i <= MAX_PARTICIPANTS; i++) {
+    //         if (ticketToParticipant[i] != address(0)) {
+    //             isParticipant[ticketToParticipant[i]] = false;
+    //             ticketToParticipant[i] = address(0);
+    //         }
+    //     }
+
+    //     // Reset available tickets
+    //     delete availableTickets;
+    //     for (uint8 i = 1; i <= MAX_PARTICIPANTS; i++) {
+    //         availableTickets.push(i);
+    //     }
+
+    //     emit NewLotteryStarted(drawId);
+    // }
+
+    function uploadPrize() external payable onlyOwner {
+        require(drawCompleted || currentPrize == 0, "Active lottery with prize already set");
+        require(msg.value > 0, "Prize amount must be greater than 0");
+        
         // Reset lottery state
         nextDrawTimestamp = 0;
-        currentPrize = 0;
+        currentPrize = msg.value;
         drawCompleted = false;
         winner = address(0);
 
@@ -86,14 +113,6 @@ contract DLottery is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeab
         }
 
         emit NewLotteryStarted(drawId);
-    }
-
-    function uploadPrize() external payable onlyOwner {
-        require(!drawCompleted, "No active lottery");
-        require(currentPrize == 0, "Prize already uploaded");
-        require(msg.value > 0, "Prize amount must be greater than 0");
-
-        currentPrize = msg.value;
     }
 
     function setDrawDate(uint256 timestamp) external onlyOwner {
