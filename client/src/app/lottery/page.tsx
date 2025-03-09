@@ -8,7 +8,7 @@ const winningValue = 0.036;
 
 const Lottery = () => {
   return (
-    <div>
+    <div className="h-svh">
       <div className="bg-[#0d2925] py-4 relative">
         <div className="text-white font-bold moving-text">
           Last Winner: {winnerAddress}, Previous Winnings: {winningValue} MATIC
