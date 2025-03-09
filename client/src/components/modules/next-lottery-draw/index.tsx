@@ -5,13 +5,35 @@ import TicketList from "./components/ticket-list";
 import { useDlottery } from "@/hooks";
 
 const NextLotteryDraw = () => {
-  const { currentDrawInfo } = useDlottery();
+  const { currentDrawInfo, remainingTickets } = useDlottery();
+  const { participate, isParticipating, participateData, participateError } =
+    useDlottery();
   const [countdown, setCountdown] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
+
+  const handleParticipate = async () => {
+    try {
+      console.log("participate");
+      participate();
+    } catch (error) {
+      console.error("Error participating:", error);
+      alert("Failed to participate. See console for details.");
+    }
+  };
+
+  useEffect(() => {
+    if (participateData) {
+      alert("Draw performed successfully!");
+    }
+    if (participateError) {
+      console.error("Error performing draw:", participateError);
+      alert("Failed to perform draw.");
+    }
+  }, [participateData, participateError]);
 
   useEffect(() => {
     // Only set up countdown if we have a valid draw time
@@ -53,6 +75,8 @@ const NextLotteryDraw = () => {
     ? null
     : !currentDrawInfo?.drawTime
     ? "Not scheduled"
+    : currentDrawInfo?.drawTime?.getTime() < Date.now()
+    ? "Draw in progress"
     : `${countdown.days > 0 ? `${countdown.days}d ` : ""}${String(
         countdown.hours
       ).padStart(2, "0")}:${String(countdown.minutes).padStart(
@@ -84,6 +108,9 @@ const NextLotteryDraw = () => {
           <div className="font-bold text-base text-gray-500">
             {formattedPrize}
           </div>
+          <div className="font-bold text-base text-gray-500">
+          Remaining: {remainingTickets} tickets
+          </div>
         </div>
         <div>
           <div className="font-bold text-base text-gray-500 ">
@@ -98,10 +125,14 @@ const NextLotteryDraw = () => {
       <div className="flex flex-col gap-4">
         <Button
           className="bg-transparent border border-[#4f46e5] hover:bg-[#342db6] w-fit"
+          onClick={handleParticipate}
           disabled={
-            !(!currentDrawInfo?.completed &&
+            isParticipating ||
+            !(
+              !currentDrawInfo?.completed &&
               Number(currentDrawInfo?.prize) >= 0 &&
-              (currentDrawInfo?.drawTime?.getTime() || 0) > Date.now())
+              (currentDrawInfo?.drawTime?.getTime() || 0) > Date.now()
+            )
           }
         >
           Participate to next draw

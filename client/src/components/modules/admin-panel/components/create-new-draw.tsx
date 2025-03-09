@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React, { useState, useEffect, use } from "react";
@@ -16,13 +17,6 @@ const CreateNewDraw = () => {
   const [drawTime, setDrawTime] = useState<string>("");
   const chainId = useChainId();
   const { currentOwner, currentDrawInfo } = useDlottery();
-
-  console.log("currentOwner", currentOwner);
-  console.log("chainId", chainId);
-  console.log("currentDrawInfo", currentDrawInfo);
-  console.log("prize", prize);
-  console.log("drawTime", drawTime);
-  console.log("drawTimeTimestamp", new Date(drawTime).getTime() / 1000);
 
   const { uploadPrize, uploadPrizeData, uploadPrizeError, isUploadingPrize } =
     useDlottery();

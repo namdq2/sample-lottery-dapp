@@ -55,11 +55,15 @@ export function useDlottery() {
       }
     : null;
 
-  const remainingTickets = useReadContract({
+  const { data: remainingTicketsData } = useReadContract({
     address: contractAddress,
     abi: DLOTTERY_ABI,
     functionName: "getRemainingTickets",
   });
+
+  const remainingTickets = remainingTicketsData
+    ? Number(remainingTicketsData)
+    : 0;
 
   const ticketInfo = (ticketId: number) => {
     return useReadContract({
