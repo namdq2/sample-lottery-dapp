@@ -1,32 +1,52 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Countdown from "react-countdown";
 
-const Timer = () => {
+const Timer = ({ date }: { date: number }) => {
   return (
     <Countdown
-      className="text-end max-sm:text-start"
-      date={Date.now() + 1000000000}
+      date={date}
       renderer={(props) => {
-        const { days, hours, minutes, seconds } = props;
-
+        const { days, hours, minutes, seconds, completed } = props;
+        
+        if (completed) {
+          return <span className="text-[#F43F5E] font-bold">Draw in progress</span>;
+        }
+        
         return (
-          <div className="font-bold text-lg text-white flex gap-4 justify-end max-sm:justify-start">
-            <div className="w-10">
-               <div className="w-10 h-10 bg-[#023a30] flex items-center justify-center">{days}</div>
-               <div className="text-sm text-center">days</div>
+          <div className="font-bold flex flex-wrap gap-2 justify-end max-sm:justify-start">
+            <div className="flex gap-2">
+              {days > 0 && (
+                <div className="flex flex-col items-center">
+                  <div className="w-12 h-12 bg-[#1E293B] border border-[#6366F1]/30 rounded-md flex items-center justify-center text-[#6366F1] shadow-lg shadow-[#6366F1]/5">
+                    {days}
+                  </div>
+                  <div className="text-xs text-gray-400 mt-1">days</div>
+                </div>
+              )}
+              
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 bg-[#1E293B] border border-[#6366F1]/30 rounded-md flex items-center justify-center text-[#6366F1] shadow-lg shadow-[#6366F1]/5">
+                  {String(hours).padStart(2, '0')}
+                </div>
+                <div className="text-xs text-gray-400 mt-1">hours</div>
+              </div>
             </div>
-            <div className="w-10">
-               <div className="w-10 h-10 bg-[#023a30] flex items-center justify-center">{hours}</div>
-               <div className="text-sm text-center">hours</div>
-            </div>
-            <div className="w-10">
-               <div className="w-10 h-10 bg-[#023a30] flex items-center justify-center">{minutes}</div>
-               <div className="text-sm text-center">mins</div>
-            </div>
-            <div className="w-10">
-               <div className="w-10 h-10 bg-[#023a30] flex items-center justify-center">{seconds}</div>
-               <div className="text-sm text-center">secs</div>
+            
+            <div className="flex gap-2">
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 bg-[#1E293B] border border-[#6366F1]/30 rounded-md flex items-center justify-center text-[#6366F1] shadow-lg shadow-[#6366F1]/5">
+                  {String(minutes).padStart(2, '0')}
+                </div>
+                <div className="text-xs text-gray-400 mt-1">mins</div>
+              </div>
+              
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 bg-[#1E293B] border border-[#6366F1]/30 rounded-md flex items-center justify-center text-[#6366F1] shadow-lg shadow-[#6366F1]/5">
+                  {String(seconds).padStart(2, '0')}
+                </div>
+                <div className="text-xs text-gray-400 mt-1">secs</div>
+              </div>
             </div>
           </div>
         );

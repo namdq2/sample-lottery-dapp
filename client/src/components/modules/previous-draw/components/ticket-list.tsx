@@ -43,26 +43,50 @@ const lotteryData = [
 
 const TicketList = () => {
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="text-white w-[100px]">DRAW ID</TableHead>
-          <TableHead className="text-white text-right">DATEW</TableHead>
-          <TableHead className="text-white text-right">PRIZE</TableHead>
-          <TableHead className="text-white text-right">WINNER</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {lotteryData.map((item) => (
-          <TableRow key={item.id}>
-            <TableCell className="text-white font-medium">{item.id}</TableCell>
-            <TableCell className="text-white text-right">{item.date}</TableCell>
-            <TableCell className="text-white text-right">{item.prize}</TableCell>
-            <TableCell className="text-white text-right">{item.winner}</TableCell>
+    <div className="overflow-x-auto">
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-[#141B33] border-b border-[#0A0F1E]">
+            <TableHead className="text-white font-medium w-[100px]">
+              DRAW ID
+            </TableHead>
+            <TableHead className="text-white text-right font-medium">
+              DATE
+            </TableHead>
+            <TableHead className="text-white text-right font-medium">
+              PRIZE
+            </TableHead>
+            <TableHead className="text-white text-right font-medium">
+              WINNER
+            </TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {lotteryData.map((item, idx) => (
+            <TableRow
+              key={item.id}
+              className={`${
+                idx % 2 === 0 ? "bg-[#0A0F1E]/50" : "bg-[#141B33]/20"
+              } hover:bg-[#1E293B] transition-colors`}
+            >
+              <TableCell className="text-[#6366F1] font-medium">
+                {item.id}
+              </TableCell>
+              <TableCell className="text-gray-300 text-right">
+                {item.date}
+              </TableCell>
+              <TableCell className="text-[#10B981] font-medium text-right">
+                {item.prize}
+              </TableCell>
+              <TableCell className="text-gray-300 text-right font-mono">
+                <span className="md:hidden">{item.winner}</span>
+                <span className="hidden md:inline">{item.winner}</span>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 

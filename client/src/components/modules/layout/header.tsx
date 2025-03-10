@@ -1,38 +1,101 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import MenuIcon from "@/components/icons/menu-icon";
+import WalletIcon from "@/components/icons/wallet-icon";
 import { useAccount, useDisconnect } from "wagmi";
 import { ROUTES } from "@/constants/common";
 import { useRouter } from "next/navigation";
+import { Menu, X } from "lucide-react";
 
 const Header = () => {
-  const { address } = useAccount();
   const router = useRouter();
+  const { address } = useAccount();
   const { disconnect } = useDisconnect();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!address) {
       router.push(ROUTES.ROOT);
     }
-  }, [address])
+  }, [address, router]);
+
+  // Format address to show first 6 and last 4 characters
+  const formatAddress = (addr: string | undefined) => {
+    if (!addr) return "";
+    return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  };
 
   return (
-    <div className="border-b border-b-[#0a1f1c] h-fit flex justify-between items-center py-2 px-14">
-      <div className="leading-8 font-extrabold text-xl flex items-center gap-2">
-        <div>
-          <span className="text-white">DLottery</span>
-          <div className="text-base font-medium w-36 truncate text-[#036756]" title={address}>User: {address}</div>
+    <header className="bg-[#0a0f1e] border-b border-b-[#1E293B] sticky top-0 z-50">
+      {/* Desktop Navigation */}
+      <div className="h-16 px-4 md:px-8 lg:px-14 mx-auto flex items-center justify-between">
+        {/* Logo */}
+        <div className="flex items-center">
+          <h1 className="font-extrabold text-xl text-white">DLottery</h1>
+        </div>
+
+        {/* Mobile Menu Toggle */}
+        <div className="md:hidden flex items-center">
+          <button 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="p-2 rounded-md text-gray-300 hover:text-white"
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+
+        {/* Desktop Navigation Items */}
+        <div className="hidden md:flex items-center space-x-4">
+          <div className="p-2 rounded-lg bg-[#1E293B] flex">
+            <Button className="bg-[#6366F1] hover:bg-[#6366F1]/80 mr-2">
+              Buy Tickets
+            </Button>
+            <Button
+              onClick={() => disconnect()}
+              className="bg-[#F43F5E] hover:bg-[#F43F5E]/80"
+            >
+              Disconnect
+            </Button>
+          </div>
+        </div>
+
+        {/* Wallet Address - Desktop */}
+        <div className="hidden md:flex items-center gap-2">
+          <WalletIcon className="fill-white" />
+          <div 
+            className="text-base font-medium text-[#6366F1] truncate max-w-[140px] lg:max-w-[200px]" 
+            title={address}
+          >
+            {address ? formatAddress(address) : "Not connected"}
+          </div>
         </div>
       </div>
 
-      <div className="p-2 rounded-lg bg-[#0a1f1c]">
-        <Button className="bg-[#036756] hover:bg-[#036756]">Buy Tickets</Button>
-        <Button onClick={() => disconnect()}>Disconnect</Button>
-      </div>
-
-      <MenuIcon className="fill-white" />
-    </div>
+      {/* Mobile Navigation Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden bg-[#0a0f1e] border-t border-[#1E293B] py-4 px-4">
+          <div className="flex flex-col space-y-4">
+            <Button className="bg-[#6366F1] hover:bg-[#6366F1]/80 w-full">
+              Buy Tickets
+            </Button>
+            <Button
+              onClick={() => disconnect()}
+              className="bg-[#F43F5E] hover:bg-[#F43F5E]/80 w-full"
+            >
+              Disconnect
+            </Button>
+            
+            {/* Wallet Address - Mobile */}
+            <div className="flex items-center gap-2 py-2 px-3 bg-[#1E293B] rounded-md">
+              <WalletIcon className="fill-white" />
+              <div className="text-sm font-medium text-[#6366F1] truncate">
+                {address ? formatAddress(address) : "Not connected"}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </header>
   );
 };
 
