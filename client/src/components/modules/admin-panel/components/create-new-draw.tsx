@@ -84,7 +84,7 @@ const CreateNewDraw = () => {
       showToast(
         "Prize Uploaded",
         "success",
-        `Prize of ${prize} ETH uploaded successfully!`
+        `Prize of ${prize} BNB uploaded successfully!`
       );
     } else if (uploadPrizeError) {
       showToast(
@@ -144,7 +144,7 @@ const CreateNewDraw = () => {
   // Compute button states based on current draw info
   const canUploadPrize =
     !isUploadingPrize &&
-    ((!currentDrawInfo?.completed && Number(currentDrawInfo?.prize) === 0) ||
+    ((currentDrawInfo?.completed && Number(currentDrawInfo?.prize) === 0) ||
       (currentDrawInfo?.completed &&
         currentDrawInfo?.winner ===
         "0x0000000000000000000000000000000000000000"));
@@ -159,6 +159,7 @@ const CreateNewDraw = () => {
     !isPerformingDraw &&
     !currentDrawInfo?.completed &&
     Number(currentDrawInfo?.prize) > 0 &&
+    currentDrawInfo?.drawTime !== null &&
     (currentDrawInfo?.drawTime?.getTime() || 0) < Date.now();
 
   // Control input visibility
@@ -272,7 +273,7 @@ const CreateNewDraw = () => {
                   placeholder="Prize amount"
                 />
                 <span className="text-[#6366F1] font-semibold whitespace-nowrap">
-                  ETH
+                  BNB
                 </span>
               </div>
             )}

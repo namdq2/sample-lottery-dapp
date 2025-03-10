@@ -12,31 +12,31 @@ const lotteryData = [
   {
     id: "#1234",
     date: "March 10, 2025",
-    prize: "0.01 ETH",
+    prize: "0.01 BNB",
     winner: "0x1234...5678",
   },
   {
     id: "#1235",
     date: "March 11, 2025",
-    prize: "0.02 ETH",
+    prize: "0.02 BNB",
     winner: "0x2345...6789",
   },
   {
     id: "#1236",
     date: "March 12, 2025",
-    prize: "0.05 ETH",
+    prize: "0.05 BNB",
     winner: "0x3456...7890",
   },
   {
     id: "#1237",
     date: "March 13, 2025",
-    prize: "0.03 ETH",
+    prize: "0.03 BNB",
     winner: "0x4567...8901",
   },
   {
     id: "#1238",
     date: "March 14, 2025",
-    prize: "0.01 ETH",
+    prize: "0.01 BNB",
     winner: "0x5678...9012",
   },
 ];

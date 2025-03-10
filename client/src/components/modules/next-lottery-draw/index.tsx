@@ -95,8 +95,8 @@ const NextLotteryDraw = () => {
 
   // Format the prize amount
   const formattedPrize = currentDrawInfo?.prize
-    ? `${Number(currentDrawInfo.prize).toLocaleString()} ETH`
-    : "0 ETH";
+    ? `${Number(currentDrawInfo.prize).toLocaleString()} BNB`
+    : "0 BNB";
 
   // If no current draw at all
   if (!currentDrawInfo) {
