@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import {
   DLOTTERY_ABI,
   DLOTTERY_CONTRACT_ADDRESSES,
@@ -14,9 +15,9 @@ import { formatEther } from "viem";
 
 // Type for the draw information returned by getCurrentDrawInfo
 export type DrawInfo = {
-  drawId: bigint;
-  prize: bigint;
-  drawTime: bigint;
+  drawId: number;
+  prize: string;
+  drawTime: Date | null;
   completed: boolean;
   winner: `0x${string}`;
 };
@@ -65,43 +66,13 @@ export function useDlottery() {
     ? Number(remainingTicketsData)
     : 0;
 
-  const ticketInfo = (ticketId: number) => {
-    return useReadContract({
-      address: contractAddress,
-      abi: DLOTTERY_ABI,
-      functionName: "getTicketInfo",
-      args: [ticketId],
-    });
-  };
-
-  const userRegistered = useReadContract({
-    address: contractAddress,
-    abi: DLOTTERY_ABI,
-    functionName: "isRegistered",
-    args: [userAddress as `0x${string}`],
-  });
-
-  const checkRegistration = (address: `0x${string}`) => {
-    return useReadContract({
-      address: contractAddress,
-      abi: DLOTTERY_ABI,
-      functionName: "isRegistered",
-      args: [address],
-    });
-  };
-
-  const paused = useReadContract({
-    address: contractAddress,
-    abi: DLOTTERY_ABI,
-    functionName: "paused",
-  });
-
-  // Write functions
+  // Write functions with reset functions
   const {
     writeContract: participateWrite,
     data: participateData,
     isPending: isParticipating,
     error: participateError,
+    reset: resetParticipate, // Added reset function
   } = useWriteContract();
 
   const {
@@ -109,6 +80,7 @@ export function useDlottery() {
     data: uploadPrizeData,
     isPending: isUploadingPrize,
     error: uploadPrizeError,
+    reset: resetUploadPrize, // Added reset function
   } = useWriteContract();
 
   const {
@@ -116,6 +88,7 @@ export function useDlottery() {
     data: withdrawPrizeData,
     isPending: isWithdrawingPrize,
     error: withdrawPrizeError,
+    reset: resetWithdrawPrize, // Added reset function
   } = useWriteContract();
 
   const {
@@ -123,6 +96,7 @@ export function useDlottery() {
     data: performDrawData,
     isPending: isPerformingDraw,
     error: performDrawError,
+    reset: resetPerformDraw, // Added reset function
   } = useWriteContract();
 
   const {
@@ -130,6 +104,7 @@ export function useDlottery() {
     data: setDrawDateData,
     isPending: isSettingDrawDate,
     error: setDrawDateError,
+    reset: resetSetDrawDate, // Added reset function
   } = useWriteContract();
 
   // Function wrappers for write functions
@@ -143,38 +118,23 @@ export function useDlottery() {
 
   const uploadPrize = async (amount: bigint) => {
     try {
-      // Let's remove the explicit gas limit and use better error handling
       return await uploadPrizeWrite({
         address: contractAddress,
         abi: DLOTTERY_ABI,
         functionName: "uploadPrize",
         value: amount,
-        // Remove the explicit gas limit to let the provider estimate it
       });
     } catch (error) {
-      // Improved error logging
       console.error("Error uploading prize:", error);
-
-      // Log more details about the transaction attempt
       console.debug("Transaction details:", {
         contractAddress,
         functionName: "uploadPrize",
         value: amount.toString(),
         chainId,
       });
-
       throw error;
     }
   };
-
-  //   const uploadPrize = (amount: bigint) => {
-  //     uploadPrizeWrite({
-  //       address: contractAddress,
-  //       abi: DLOTTERY_ABI,
-  //       functionName: 'uploadPrize',
-  //       value: amount,
-  //     });
-  //   };
 
   const withdrawPrize = () => {
     withdrawPrizeWrite({
@@ -201,16 +161,27 @@ export function useDlottery() {
     });
   };
 
+  // Add resetTransactions function to clear all transaction states
+  const resetTransactions = useCallback(() => {
+    if (resetParticipate) resetParticipate();
+    if (resetUploadPrize) resetUploadPrize();
+    if (resetWithdrawPrize) resetWithdrawPrize();
+    if (resetPerformDraw) resetPerformDraw();
+    if (resetSetDrawDate) resetSetDrawDate();
+  }, [
+    resetParticipate,
+    resetUploadPrize,
+    resetWithdrawPrize,
+    resetPerformDraw,
+    resetSetDrawDate,
+  ]);
+
   return {
     contractAddress,
     // Read functions
     currentOwner,
     currentDrawInfo,
     remainingTickets,
-    ticketInfo,
-    userRegistered,
-    checkRegistration,
-    paused,
     // Write functions
     participate,
     isParticipating,
@@ -236,6 +207,9 @@ export function useDlottery() {
     isSettingDrawDate,
     setDrawDateData,
     setDrawDateError,
+
+    // Add the reset function to the returned object
+    resetTransactions,
   };
 }
 

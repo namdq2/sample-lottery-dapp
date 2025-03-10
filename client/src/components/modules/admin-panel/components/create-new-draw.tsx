@@ -1,160 +1,171 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import React, {useState, useEffect, useRef} from "react";
-import { useAccount } from "wagmi";
-import { parseEther } from "viem";
-import { useDlottery } from "@/hooks";
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
+import React, {useState, useEffect} from "react";
+import {useAccount} from "wagmi";
+import {parseEther} from "viem";
+import {useDlottery} from "@/hooks";
 import DateIcon from "@/components/icons/date-icon";
 import TicketIcon from "@/components/icons/ticket-icon";
 import UploadIcon from "@/components/icons/upload-icon";
-import { useToast } from "@/components/context/toast-context";
+import {useToast} from "@/components/context/toast-context";
 
 const CreateNewDraw = () => {
-  const { address } = useAccount();
-  const { currentDrawInfo } = useDlottery();
+  const {address} = useAccount();
+  const {showToast} = useToast();
   const [isCreatingDraw, setIsCreatingDraw] = useState<boolean>(false);
   const [prize, setPrize] = useState<number>(0.01);
   const [drawTime, setDrawTime] = useState<string>("");
-  const { showToast } = useToast();
 
-  const { uploadPrize, uploadPrizeData, uploadPrizeError, isUploadingPrize } =
-    useDlottery();
-  const { setDrawDate, setDrawDateData, setDrawDateError, isSettingDrawDate } =
-    useDlottery();
-  const { performDraw, performDrawData, performDrawError, isPerformingDraw } =
-    useDlottery();
+  // Use the useDlottery hook more efficiently
+  const {
+    currentDrawInfo,
 
-  // Add at the top of your component:
-  const prevUploadPrizeData = useRef(null);
-  const prevUploadPrizeError = useRef(null);
-  const prevSetDrawDateData = useRef(null);
-  const prevSetDrawDateError = useRef(null);
-  const prevPerformDrawData = useRef(null);
-  const prevPerformDrawError = useRef(null);
+    // Upload prize functionality
+    uploadPrize,
+    uploadPrizeData,
+    uploadPrizeError,
+    isUploadingPrize,
 
+    // Set draw date functionality
+    setDrawDate,
+    setDrawDateData,
+    setDrawDateError,
+    isSettingDrawDate,
+
+    // Perform draw functionality
+    performDraw,
+    performDrawData,
+    performDrawError,
+    isPerformingDraw,
+
+    // Reset state function from our improved hook
+    resetTransactions,
+  } = useDlottery();
+
+  // Function to handle uploading prize
   const handleUploadPrize = async () => {
     try {
-      uploadPrize(parseEther(prize.toString()));
+      await uploadPrize(parseEther(prize.toString()));
     } catch (error) {
       console.error("Error uploading prize:", error);
-      showToast(
-        "Upload Failed",
-        "error",
-        "Failed to upload prize. See console for details."
-      );
+      // Toast will be handled by the useEffect below
     }
   };
 
+  // Function to handle setting draw time
   const handleSetDrawTime = async () => {
     try {
       const drawTimeTimestamp = new Date(drawTime).getTime() / 1000;
-      setDrawDate(drawTimeTimestamp);
+      await setDrawDate(drawTimeTimestamp);
     } catch (error) {
       console.error("Error setting draw time:", error);
-      showToast(
-        "Date Setup Failed",
-        "error",
-        "Failed to set draw time. See console for details."
-      );
+      // Toast will be handled by the useEffect below
     }
   };
 
+  // Function to handle performing draw
   const handlePerformDraw = async () => {
     try {
-      performDraw();
+      await performDraw();
     } catch (error) {
       console.error("Error performing draw:", error);
-      showToast(
-        "Draw Failed",
-        "error",
-        "Failed to perform draw. See console for details."
-      );
+      // Toast will be handled by the useEffect below
     }
   };
 
-  // Handle transaction feedback with toasts
-  useEffect(() => {
-    if (performDrawData)
-      showToast(
-        "Draw Successful",
-        "success",
-        "The lottery draw has been performed successfully!"
-      );
-    if (performDrawError)
-      showToast(
-        "Draw Failed",
-        "error",
-        "There was an error while performing the draw."
-      );
-  }, [performDrawData, performDrawError, showToast]);
+  console.log(`currentDrawInfo`, currentDrawInfo);
 
+  // UseEffect for handling transaction responses with toasts
   useEffect(() => {
-    if (setDrawDateData)
-      showToast(
-        "Date Set",
-        "success",
-        `Draw date set at ${drawTime} successfully!`
-      );
-    if (setDrawDateError)
-      showToast(
-        "Date Setup Failed",
-        "error",
-        "There was an error while setting the draw date."
-      );
-  }, [setDrawDateData, setDrawDateError, drawTime, showToast]);
-
-  // This pattern could cause the infinite loop:
-  useEffect(() => {
-    // Only show toast when these values change from null/undefined to a value
-    if (uploadPrizeData && !prevUploadPrizeData.current) {
+    // Prize upload notifications
+    if (uploadPrizeData) {
       showToast(
         "Prize Uploaded",
         "success",
         `Prize of ${prize} ETH uploaded successfully!`
       );
-      prevUploadPrizeData.current = uploadPrizeData;
-    }
-
-    if (uploadPrizeError && !prevUploadPrizeError.current) {
+    } else if (uploadPrizeError) {
       showToast(
         "Prize Upload Failed",
         "error",
         "There was an error while uploading the prize to the contract."
       );
-      prevUploadPrizeError.current = uploadPrizeError;
     }
-  }, [uploadPrizeData, uploadPrizeError, prize, showToast]);
 
-  // Can upload prize when: Prize is 0 or there's a completed draw with no winner
+    // Set draw date notifications
+    if (setDrawDateData) {
+      showToast(
+        "Date Set",
+        "success",
+        `Draw date set at ${drawTime} successfully!`
+      );
+    } else if (setDrawDateError) {
+      showToast(
+        "Date Setup Failed",
+        "error",
+        "There was an error while setting the draw date."
+      );
+    }
+
+    // Perform draw notifications
+    if (performDrawData) {
+      showToast(
+        "Draw Successful",
+        "success",
+        "The lottery draw has been performed successfully!"
+      );
+    } else if (performDrawError) {
+      showToast(
+        "Draw Failed",
+        "error",
+        "There was an error while performing the draw."
+      );
+    }
+
+    // Optional cleanup: reset transactions when component unmounts
+    return () => {
+      resetTransactions?.();
+    };
+  }, [
+    uploadPrizeData,
+    uploadPrizeError,
+    setDrawDateData,
+    setDrawDateError,
+    performDrawData,
+    performDrawError,
+    prize,
+    drawTime,
+    showToast,
+    resetTransactions,
+  ]);
+
+  // Compute button states based on current draw info
   const canUploadPrize =
     !isUploadingPrize &&
     ((!currentDrawInfo?.completed && Number(currentDrawInfo?.prize) === 0) ||
       (currentDrawInfo?.completed &&
         currentDrawInfo?.winner ===
-          "0x0000000000000000000000000000000000000000"));
+        "0x0000000000000000000000000000000000000000"));
 
-  // Can set draw date when: Draw is not completed, prize is set, but draw time is not set
   const canSetDrawDate =
     !isSettingDrawDate &&
     !currentDrawInfo?.completed &&
     Number(currentDrawInfo?.prize) > 0 &&
     currentDrawInfo?.drawTime === null;
 
-  // Can perform draw when: Draw is not completed, prize is set, and current time is past draw time
   const canPerformDraw =
     !isPerformingDraw &&
     !currentDrawInfo?.completed &&
     Number(currentDrawInfo?.prize) > 0 &&
     (currentDrawInfo?.drawTime?.getTime() || 0) < Date.now();
 
-  // Need to show prize input
+  // Control input visibility
   const showPrizeInput = !(
     !currentDrawInfo?.completed && Number(currentDrawInfo?.prize) >= 0
   );
 
-  // Need to show date input
   const showDateInput = !(
     !currentDrawInfo?.completed &&
     Number(currentDrawInfo?.prize) > 0 &&
@@ -175,7 +186,7 @@ const CreateNewDraw = () => {
             onClick={() => setIsCreatingDraw(true)}
           >
             <div className="text-[#6366F1] text-2xl">
-              <TicketIcon />
+              <TicketIcon/>
             </div>
             <span>Create New Lottery Draw</span>
           </Button>
@@ -199,7 +210,7 @@ const CreateNewDraw = () => {
                   canUploadPrize ? "text-[#10B981]" : "text-gray-400"
                 }`}
               >
-                <UploadIcon />
+                <UploadIcon/>
               </div>
               {isUploadingPrize ? "Uploading..." : "Upload Prize"}
             </Button>
@@ -211,8 +222,8 @@ const CreateNewDraw = () => {
                 bg-[#1E293B] hover:bg-[#FBBF24]/20 w-full md:w-32 h-32 whitespace-normal
                 flex flex-col items-center justify-center gap-3 rounded-xl shadow-lg
                 shadow-[#FBBF24]/10 text-white font-medium transition-all ${
-                  !canSetDrawDate && "opacity-50"
-                }`}
+                !canSetDrawDate && "opacity-50"
+              }`}
               onClick={handleSetDrawTime}
               disabled={!canSetDrawDate}
             >
@@ -221,7 +232,7 @@ const CreateNewDraw = () => {
                   canSetDrawDate ? "text-[#FBBF24]" : "text-gray-400"
                 }`}
               >
-                <DateIcon />
+                <DateIcon/>
               </div>
               Set Draw Date
             </Button>
@@ -241,7 +252,7 @@ const CreateNewDraw = () => {
                   canPerformDraw ? "text-[#F43F5E]" : "text-gray-400"
                 }`}
               >
-                <TicketIcon />
+                <TicketIcon/>
               </div>
               Perform Draw
             </Button>

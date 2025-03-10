@@ -131,13 +131,17 @@ const NextLotteryDraw = () => {
               <Button
                 className="bg-[#FBBF24] hover:bg-[#FBBF24]/80 text-black w-full"
                 onClick={handleClaimPrize}
-                disabled={isWithdrawingPrize}
+                disabled={
+                  isWithdrawingPrize || Number(currentDrawInfo.prize) === 0
+                }
               >
                 {isWithdrawingPrize ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Claiming...
                   </>
+                ) : Number(currentDrawInfo.prize) === 0 ? (
+                  <>Claimed Prize</>
                 ) : (
                   <>Claim Prize</>
                 )}

@@ -114,3 +114,15 @@ Upgrading DLottery contract...
 Upgrading proxy at 0x5E28E9Fc57339291c494796186B40aA369Dd9E9b...
 DLottery upgraded successfully!
 New implementation address: 0x6a76d5479A336605e4Cab2B5e877591d7c2A1B06
+
+
+
+# BNB
+
+Deploying DLottery contract...
+Deploying with account: 0xd79Dc6Eeeb004cEebA6A1f6490B6d637d428Fec9
+Deploying proxy...
+DLottery deployed successfully!
+Proxy address: 0xeE4A0335bCC0C92Ae27eE00E579aa812a887D2A7
+Implementation address: 0xCbe78Abb561f4e2947bf839152bc5149e62e6347
+Proxy admin address: 0xDd9a9D9D3Ee0926C6F07B8cF54eCC73e2AA3Fa22
