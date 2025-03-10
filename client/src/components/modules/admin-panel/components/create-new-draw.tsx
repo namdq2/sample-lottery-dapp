@@ -58,6 +58,7 @@ const CreateNewDraw = () => {
   const handleSetDrawTime = async () => {
     try {
       const drawTimeTimestamp = new Date(drawTime).getTime() / 1000;
+      console.log(drawTimeTimestamp);
       await setDrawDate(drawTimeTimestamp);
     } catch (error) {
       console.error("Error setting draw time:", error);

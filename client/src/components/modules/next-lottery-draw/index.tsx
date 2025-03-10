@@ -190,10 +190,10 @@ const NextLotteryDraw = () => {
               disabled={isParticipating}
             >
               {isParticipating ? (
-                <>
+                <div className="flex items-center gap-2">
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Processing...
-                </>
+                </div>
               ) : (
                 <>Participate in Draw</>
               )}
