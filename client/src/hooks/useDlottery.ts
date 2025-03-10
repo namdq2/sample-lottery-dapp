@@ -39,7 +39,7 @@ export function useDlottery() {
 
   const currentOwner = currentOwnerData ? currentOwnerData : null;
 
-  const { data: drawData } = useReadContract({
+  const { data: drawData, refetch } = useReadContract({
     address: contractAddress,
     abi: DLOTTERY_ABI,
     functionName: "getCurrentDrawInfo",
@@ -76,7 +76,7 @@ export function useDlottery() {
   } = useWriteContract();
 
   const {
-    writeContract: uploadPrizeWrite,
+    writeContractAsync: uploadPrizeWrite,
     data: uploadPrizeData,
     isPending: isUploadingPrize,
     error: uploadPrizeError,
@@ -92,7 +92,7 @@ export function useDlottery() {
   } = useWriteContract();
 
   const {
-    writeContract: performDrawWrite,
+    writeContractAsync: performDrawWrite,
     data: performDrawData,
     isPending: isPerformingDraw,
     error: performDrawError,
@@ -100,7 +100,7 @@ export function useDlottery() {
   } = useWriteContract();
 
   const {
-    writeContract: setDrawDateWrite,
+    writeContractAsync: setDrawDateWrite,
     data: setDrawDateData,
     isPending: isSettingDrawDate,
     error: setDrawDateError,
@@ -118,12 +118,16 @@ export function useDlottery() {
 
   const uploadPrize = async (amount: bigint) => {
     try {
-      return await uploadPrizeWrite({
+      const uploadPrize = await uploadPrizeWrite({
         address: contractAddress,
         abi: DLOTTERY_ABI,
         functionName: "uploadPrize",
         value: amount,
       });
+      setTimeout(() => {
+        refetch()
+      }, 3000)
+      return uploadPrize;
     } catch (error) {
       console.error("Error uploading prize:", error);
       console.debug("Transaction details:", {
@@ -144,21 +148,27 @@ export function useDlottery() {
     });
   };
 
-  const performDraw = () => {
-    performDrawWrite({
+  const performDraw = async () => {
+    await performDrawWrite({
       address: contractAddress,
       abi: DLOTTERY_ABI,
       functionName: "performDraw",
     });
+    setTimeout(() => {
+      refetch()
+    }, 3000)
   };
 
-  const setDrawDate = (timestamp: number) => {
-    setDrawDateWrite({
+  const setDrawDate = async (timestamp: number) => {
+    await setDrawDateWrite({
       address: contractAddress,
       abi: DLOTTERY_ABI,
       functionName: "setDrawDate",
       args: [BigInt(timestamp)],
     });
+    setTimeout(() => {
+      refetch()
+    }, 3000)
   };
 
   // Add resetTransactions function to clear all transaction states
