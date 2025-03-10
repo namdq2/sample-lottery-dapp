@@ -10,7 +10,7 @@ const LOTTERY_CONTRACT_ABI = [
   // Add other events and functions based on your contract
 ];
 
-const LOTTERY_CONTRACT_ADDRESS = process.env.LOTTERY_CONTRACT_ADDRESS || "0x0000000000000000000000000000000000000000";
+const LOTTERY_CONTRACT_ADDRESS = process.env.LOTTERY_CONTRACT_ADDRESS || "0xeE4A0335bCC0C92Ae27eE00E579aa812a887D2A7";
 
 let provider;
 let contract;
@@ -19,8 +19,7 @@ let contract;
 const initializeBlockchainConnection = () => {
   try {
     // Use environment variables for network configuration
-    const network = process.env.ETHEREUM_NETWORK || "amoy";
-    const providerUrl = process.env.ETHEREUM_PROVIDER_URL || `https://${network}.infura.io/v3/YOUR_INFURA_KEY`;
+    const providerUrl = process.env.ETHEREUM_PROVIDER_URL || `https://test.infura.io/v3/YOUR_INFURA_KEY`;
 
     provider = new ethers.providers.JsonRpcProvider(providerUrl);
     contract = new ethers.Contract(LOTTERY_CONTRACT_ADDRESS, LOTTERY_CONTRACT_ABI, provider);
