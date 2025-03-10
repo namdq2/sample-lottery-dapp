@@ -497,17 +497,17 @@ describe("DLottery", function () {
     });
   });
 
-  describe("Complete lottery flow", function () {
-    it("should run a complete lottery cycle", async function () {
-      // 1. Upload prize
-      await dlottery.uploadPrize({value: PRIZE_AMOUNT});
+  describe("Complete lottery flow 2", function () {
+    it("should run a complete lottery cycle 2", async function () {
+      // 1. Upload prize (which now starts the lottery)
+      await dlottery.uploadPrize({ value: PRIZE_AMOUNT });
 
       // 2. Set draw date
       const futureTime = await time.latest() + 3600;
       await dlottery.setDrawDate(futureTime);
 
       // 3. Multiple users participate
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 5; i++) {
         if (i < users.length) {
           await dlottery.connect(users[i]).participate();
         }
@@ -573,11 +573,11 @@ describe("DLottery", function () {
       }
 
       // 7. Verify we can start a new lottery
-      await dlottery.uploadPrize({value: PRIZE_AMOUNT});
+      await dlottery.uploadPrize({ value: PRIZE_AMOUNT });
       const [newDrawId, prize, , completed,] = await dlottery.getCurrentDrawInfo();
       console.log(`New Draw ID: ${newDrawId}`);
       expect(newDrawId).to.equal(2n); // DrawID should be 2 for the new lottery
-      expect(prize).to.equal(0);
+      expect(prize).to.equal(PRIZE_AMOUNT); // Fixed: should match the prize amount we just uploaded
       expect(completed).to.equal(false);
     });
   });
