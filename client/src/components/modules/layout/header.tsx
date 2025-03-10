@@ -7,8 +7,8 @@ import { ROUTES } from "@/constants/common";
 import { useRouter } from "next/navigation";
 
 const Header = () => {
-  const { address } = useAccount();
   const router = useRouter();
+  const { address } = useAccount();
   const { disconnect } = useDisconnect();
 
   useEffect(() => {
