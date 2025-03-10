@@ -1,17 +1,17 @@
 "use client";
-import React, { useEffect } from "react";
-import { Button } from "../../ui/button";
+import React, {useEffect} from "react";
+import {Button} from "../../ui/button";
 import TicketList from "./components/ticket-list";
 import Timer from "./components/timer";
-import { useDlottery } from "@/hooks";
-import { useAccount } from "wagmi";
-import { Loader2, Award, Ticket, Clock } from "lucide-react";
-import { useToast } from "@/components/context/toast-context";
+import {useDlottery} from "@/hooks";
+import {useAccount} from "wagmi";
+import {Loader2, Award, Ticket, Clock} from "lucide-react";
+import {useToast} from "@/components/context/toast-context";
 
 const NextLotteryDraw = () => {
-  const { address } = useAccount();
-  const { currentDrawInfo, remainingTickets } = useDlottery();
-  const { participate, isParticipating, participateData, participateError } =
+  const {address} = useAccount();
+  const {currentDrawInfo, remainingTickets} = useDlottery();
+  const {participate, isParticipating, participateData, participateError} =
     useDlottery();
   const {
     withdrawPrize,
@@ -19,7 +19,7 @@ const NextLotteryDraw = () => {
     withdrawPrizeData,
     withdrawPrizeError,
   } = useDlottery();
-  const { showToast } = useToast();
+  const {showToast} = useToast();
 
   const handleClaimPrize = async () => {
     try {
@@ -110,6 +110,27 @@ const NextLotteryDraw = () => {
     );
   }
 
+  if (currentDrawInfo.completed && currentDrawInfo.winner == "0x0000000000000000000000000000000000000000") {
+    return (
+      <div className="bg-[#1E293B] rounded-xl p-6 shadow-lg text-center">
+        <div className="font-bold text-lg text-white mb-4">
+          No winner for this draw
+        </div>
+        <p className="text-gray-400">Next draw coming soon</p>
+      </div>
+    );
+  }
+
+  if (currentDrawInfo.completed && currentDrawInfo.winner != "0x0000000000000000000000000000000000000000" && Number(currentDrawInfo?.prize) > 0 && currentDrawInfo?.winner !== address) {
+    return (
+      <div className="bg-[#1E293B] rounded-xl p-6 shadow-lg text-center">
+        <div className="font-bold text-lg text-white mb-4">
+          The winner is {currentDrawInfo.winner}!. Congratulations!
+        </div>
+      </div>
+    );
+  }
+
   // If draw is completed
   if (currentDrawInfo.completed) {
     return (
@@ -125,7 +146,7 @@ const NextLotteryDraw = () => {
           {canClaimPrize && (
             <div className="bg-[#0A0F1E]/70 rounded-lg p-4 border border-[#FBBF24]/30 w-full md:w-auto">
               <div className="text-[#FBBF24] font-bold text-lg flex items-center gap-2 mb-3">
-                <Award className="h-5 w-5" />
+                <Award className="h-5 w-5"/>
                 <span>You won {formattedPrize}!</span>
               </div>
               <Button
@@ -137,7 +158,7 @@ const NextLotteryDraw = () => {
               >
                 {isWithdrawingPrize ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
                     Claiming...
                   </>
                 ) : Number(currentDrawInfo.prize) === 0 ? (
@@ -161,22 +182,22 @@ const NextLotteryDraw = () => {
             Next Lottery Draw
           </h3>
           <div className="flex items-center gap-2 text-[#10B981] font-medium">
-            <Award className="h-4 w-4" />
+            <Award className="h-4 w-4"/>
             <span>Prize: {formattedPrize}</span>
           </div>
           <div className="flex items-center gap-2 text-gray-400 mt-1">
-            <Ticket className="h-4 w-4" />
+            <Ticket className="h-4 w-4"/>
             <span>{remainingTickets} tickets remaining</span>
           </div>
         </div>
 
         <div className="w-full md:w-auto">
           <div className="flex items-center gap-2 text-gray-400 mb-2 justify-end max-sm:justify-start">
-            <Clock className="h-4 w-4" />
+            <Clock className="h-4 w-4"/>
             <span>{formattedNextDrawDate}</span>
           </div>
           {currentDrawInfo?.drawTime && (
-            <Timer date={currentDrawInfo.drawTime.getTime()} />
+            <Timer date={currentDrawInfo.drawTime.getTime()}/>
           )}
         </div>
       </div>
@@ -191,7 +212,7 @@ const NextLotteryDraw = () => {
             >
               {isParticipating ? (
                 <div className="flex items-center gap-2">
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
                   Processing...
                 </div>
               ) : (
@@ -205,7 +226,7 @@ const NextLotteryDraw = () => {
           <h4 className="text-lg font-medium text-white mb-3">
             Current Tickets
           </h4>
-          <TicketList />
+          <TicketList/>
         </div>
       </div>
     </div>
