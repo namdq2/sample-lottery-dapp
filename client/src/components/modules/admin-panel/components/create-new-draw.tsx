@@ -90,101 +90,108 @@ const CreateNewDraw = () => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap gap-4 justify-center">
-        <Button
-          className="border border-[#4f46e5] bg-transparent hover:bg-[#342db6] w-32 h-32 whitespace-normal flex flex-col"
-          disabled={!address || isCreatingDraw}
-          onClick={() => {
-            setIsCreatingDraw(true);
-          }}
-        >
-          <TicketIcon />
-          New Lottery Draw
-        </Button>
+        {!isCreatingDraw && (
+          <Button
+            className="border border-[#4f46e5] bg-transparent hover:bg-[#342db6] w-32 h-32 whitespace-normal flex flex-col"
+            disabled={!address || isCreatingDraw}
+            onClick={() => {
+              setIsCreatingDraw(true);
+            }}
+          >
+            <TicketIcon />
+            New Lottery Draw
+          </Button>
+        )}
 
         {isCreatingDraw && (
-          <>
-            <Button
-              className="bg-transparent hover:bg-[#342db6] border border-[#4f46e5] w-32 h-32 flex flex-col"
-              onClick={handleUploadPrize}
-              disabled={
-                isUploadingPrize ||
-                !(
-                  (!currentDrawInfo?.completed &&
-                    Number(currentDrawInfo?.prize) == 0) ||
-                  (currentDrawInfo?.completed &&
-                    currentDrawInfo?.winner ==
-                      "0x0000000000000000000000000000000000000000")
-                )
-              }
-            >
-              <UploadIcon />
-              {isUploadingPrize ? "Uploading..." : "Upload Prize"}
-            </Button>
-            <Button
-              className="bg-transparent hover:bg-[#342db6] border border-[#4f46e5] w-32 h-32 whitespace-normal flex flex-col"
-              onClick={handleSetDrawTime}
-              disabled={
-                isSettingDrawDate ||
-                !(
-                  !currentDrawInfo?.completed &&
-                  Number(currentDrawInfo?.prize) > 0 &&
-                  currentDrawInfo?.drawTime === null
-                )
-              }
-            >
-              <DateIcon />
-              Set Date Next Draw
-            </Button>
-            <Button
-              className="bg-transparent hover:bg-[#342db6] border border-[#4f46e5] w-32 h-32 flex flex-col"
-              onClick={handlePerformDraw}
-              disabled={
-                isPerformingDraw ||
-                !(
-                  !currentDrawInfo?.completed &&
-                  Number(currentDrawInfo?.prize) > 0 &&
-                  (currentDrawInfo?.drawTime?.getTime() || 0) < Date.now()
-                )
-              }
-            >
-              <TicketIcon />
-              Perform Draw
-            </Button>
-          </>
+          <div className="flex flex-col gap-3 items-center">
+            <div className="flex gap-3 items-center">
+              <Button
+                className="bg-transparent hover:bg-[#342db6] border border-[#4f46e5] w-32 h-32 flex flex-col"
+                onClick={handleUploadPrize}
+                disabled={
+                  isUploadingPrize ||
+                  !(
+                    (!currentDrawInfo?.completed &&
+                      Number(currentDrawInfo?.prize) == 0) ||
+                    (currentDrawInfo?.completed &&
+                      currentDrawInfo?.winner ==
+                        "0x0000000000000000000000000000000000000000")
+                  )
+                }
+              >
+                <UploadIcon />
+                {isUploadingPrize ? "Uploading..." : "Upload Prize"}
+              </Button>
+              <Button
+                className="bg-transparent hover:bg-[#342db6] border border-[#4f46e5] w-32 h-32 whitespace-normal flex flex-col"
+                onClick={handleSetDrawTime}
+                disabled={
+                  isSettingDrawDate ||
+                  !(
+                    !currentDrawInfo?.completed &&
+                    Number(currentDrawInfo?.prize) > 0 &&
+                    currentDrawInfo?.drawTime === null
+                  )
+                }
+              >
+                <DateIcon />
+                Set Date Next Draw
+              </Button>
+              <Button
+                className="bg-transparent hover:bg-[#342db6] border border-[#4f46e5] w-32 h-32 flex flex-col"
+                onClick={handlePerformDraw}
+                disabled={
+                  isPerformingDraw ||
+                  !(
+                    !currentDrawInfo?.completed &&
+                    Number(currentDrawInfo?.prize) > 0 &&
+                    (currentDrawInfo?.drawTime?.getTime() || 0) < Date.now()
+                  )
+                }
+              >
+                <TicketIcon />
+                Perform Draw
+              </Button>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              {!(
+                !currentDrawInfo?.completed &&
+                Number(currentDrawInfo?.prize) >= 0
+              ) && (
+                <div className="flex gap-3 items-center">
+                  <Input
+                    className="w-44 text-white"
+                    type="number"
+                    min={0}
+                    value={prize}
+                    step={0.01}
+                    onChange={(e) => setPrize(parseFloat(e.target.value))}
+                    placeholder="Prize amount in ETH"
+                  />
+                  <span className="text-gray-500 font-semibold">ETH</span>
+                </div>
+              )}
+
+              {!(
+                !currentDrawInfo?.completed &&
+                Number(currentDrawInfo?.prize) > 0 &&
+                currentDrawInfo?.drawTime !== null
+              ) && (
+                <div className="flex gap-3 items-center">
+                  <Input
+                    className="w-50 text-white date-icon-input-white "
+                    type="datetime-local"
+                    onChange={(e) => setDrawTime(e.target.value)}
+                    value={drawTime}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
         )}
       </div>
-
-      {!(
-        !currentDrawInfo?.completed && Number(currentDrawInfo?.prize) >= 0
-      ) && (
-        <div className="flex gap-3 items-center">
-          <Input
-            className="w-44 text-white"
-            type="number"
-            min={0}
-            value={prize}
-            step={0.01}
-            onChange={(e) => setPrize(parseFloat(e.target.value))}
-            placeholder="Prize amount in ETH"
-          />
-          <span className="text-gray-500 font-semibold">ETH</span>
-        </div>
-      )}
-
-      {!(
-        !currentDrawInfo?.completed &&
-        Number(currentDrawInfo?.prize) > 0 &&
-        currentDrawInfo?.drawTime !== null
-      ) && (
-        <div className="flex gap-3 items-center">
-          <Input
-            className="w-50 text-white date-icon-input-white "
-            type="datetime-local"
-            onChange={(e) => setDrawTime(e.target.value)}
-            value={drawTime}
-          />
-        </div>
-      )}
     </div>
   );
 };

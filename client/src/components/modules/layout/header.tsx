@@ -15,20 +15,33 @@ const Header = () => {
     if (!address) {
       router.push(ROUTES.ROOT);
     }
-  }, [address])
+  }, [address]);
+
+  // Format address to show first 6 and last 4 characters
+  const formatAddress = (addr: string | undefined) => {
+    if (!addr) return "";
+    return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  };
 
   return (
     <div className="border-b border-b-[#0a1f1c] h-fit flex justify-between items-center py-2 px-14">
       <div className="leading-8 font-extrabold text-xl flex items-center gap-2">
         <div>
           <span className="text-white">DLottery</span>
-          <div className="text-base font-medium w-36 truncate text-[#036756]" title={address}>User: {address}</div>
+          <div className="text-base font-medium text-[#6366F1]" title={address}>
+            {address ? `User: ${formatAddress(address)}` : "Not connected"}
+          </div>
         </div>
       </div>
 
-      <div className="p-2 rounded-lg bg-[#0a1f1c]">
-        <Button className="bg-[#036756] hover:bg-[#036756]">Buy Tickets</Button>
-        <Button onClick={() => disconnect()}>Disconnect</Button>
+      <div className="p-2 rounded-lg bg-[#1E293B]">
+        <Button className="bg-[#6366F1] hover:bg-[#6366F1]/80 mr-2">Buy Tickets</Button>
+        <Button 
+          onClick={() => disconnect()} 
+          className="bg-[#F43F5E] hover:bg-[#F43F5E]/80"
+        >
+          Disconnect
+        </Button>
       </div>
 
       <MenuIcon className="fill-white" />
