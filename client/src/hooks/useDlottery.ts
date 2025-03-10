@@ -68,7 +68,7 @@ export function useDlottery() {
 
   // Write functions with reset functions
   const {
-    writeContract: participateWrite,
+    writeContractAsync: participateWrite,
     data: participateData,
     isPending: isParticipating,
     error: participateError,
@@ -108,12 +108,15 @@ export function useDlottery() {
   } = useWriteContract();
 
   // Function wrappers for write functions
-  const participate = () => {
-    participateWrite({
+  const participate = async () => {
+    await participateWrite({
       address: contractAddress,
       abi: DLOTTERY_ABI,
       functionName: "participate",
     });
+    setTimeout(() => {
+      refetch();
+    }, 3000);
   };
 
   const uploadPrize = async (amount: bigint) => {
@@ -125,8 +128,8 @@ export function useDlottery() {
         value: amount,
       });
       setTimeout(() => {
-        refetch()
-      }, 3000)
+        refetch();
+      }, 3000);
       return uploadPrize;
     } catch (error) {
       console.error("Error uploading prize:", error);
@@ -155,8 +158,8 @@ export function useDlottery() {
       functionName: "performDraw",
     });
     setTimeout(() => {
-      refetch()
-    }, 3000)
+      refetch();
+    }, 3000);
   };
 
   const setDrawDate = async (timestamp: number) => {
@@ -167,8 +170,8 @@ export function useDlottery() {
       args: [BigInt(timestamp)],
     });
     setTimeout(() => {
-      refetch()
-    }, 3000)
+      refetch();
+    }, 3000);
   };
 
   // Add resetTransactions function to clear all transaction states
