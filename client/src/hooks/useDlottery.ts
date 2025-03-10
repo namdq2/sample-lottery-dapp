@@ -30,6 +30,12 @@ export function useDlottery() {
   const contractAddress =
     DLOTTERY_CONTRACT_ADDRESSES[chainId] || DLOTTERY_CONTRACT_ADDRESSES[1]; // Default to mainnet if not found
 
+  const { refetch: refetchList } = useReadContract({
+    address: contractAddress,
+    abi: DLOTTERY_ABI,
+    functionName: "getPaidTickets",
+  });
+
   // Read functions
   const { data: currentOwnerData } = useReadContract({
     address: contractAddress,
@@ -116,6 +122,7 @@ export function useDlottery() {
     });
     setTimeout(() => {
       refetch();
+      refetchList();
     }, 3000);
   };
 
