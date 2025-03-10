@@ -23,7 +23,7 @@ const TicketList = () => {
   }
 
   if (isEmpty) {
-    return <div className="text-center py-4">No tickets purchased yet</div>;
+    return <div className="text-center py-4 text-white">No tickets purchased yet</div>;
   }
 
   return (

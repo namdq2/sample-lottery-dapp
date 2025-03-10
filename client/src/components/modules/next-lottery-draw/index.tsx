@@ -3,17 +3,36 @@ import React, { useState, useEffect } from "react";
 import { Button } from "../../ui/button";
 import TicketList from "./components/ticket-list";
 import { useDlottery } from "@/hooks";
+import { useAccount } from "wagmi";
 
 const NextLotteryDraw = () => {
+  const { address } = useAccount();
   const { currentDrawInfo, remainingTickets } = useDlottery();
   const { participate, isParticipating, participateData, participateError } =
     useDlottery();
+  const {
+    withdrawPrize,
+    isWithdrawingPrize,
+    withdrawPrizeData,
+    withdrawPrizeError,
+  } = useDlottery();
+
   const [countdown, setCountdown] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
+
+  const handleClaimPrize = async () => {
+    try {
+      console.log("withdrawPrize");
+      withdrawPrize();
+    } catch (error) {
+      console.error("Error withdrawing prize:", error);
+      alert("Failed to withdraw prize. See console for details.");
+    }
+  };
 
   const handleParticipate = async () => {
     try {
@@ -24,6 +43,16 @@ const NextLotteryDraw = () => {
       alert("Failed to participate. See console for details.");
     }
   };
+
+  useEffect(() => {
+    if (withdrawPrizeData) {
+      alert("Prize withdrawn successfully!");
+    }
+    if (withdrawPrizeError) {
+      console.error("Error withdrawing prize:", withdrawPrizeError);
+      alert("Failed to withdraw prize.");
+    }
+  }, [withdrawPrizeData, withdrawPrizeError]);
 
   useEffect(() => {
     if (participateData) {
@@ -109,7 +138,7 @@ const NextLotteryDraw = () => {
             {formattedPrize}
           </div>
           <div className="font-bold text-base text-gray-500">
-          Remaining: {remainingTickets} tickets
+            Remaining: {remainingTickets} tickets
           </div>
         </div>
         <div>
@@ -137,6 +166,27 @@ const NextLotteryDraw = () => {
         >
           Participate to next draw
         </Button>
+
+        {address === currentDrawInfo?.winner && currentDrawInfo?.completed && (
+          <div className="text-white font-bold text-lg">
+            <div className="text-white font-bold text-lg">
+              You won the last draw!
+            </div>
+            <Button
+              className="bg-transparent border border-[#4f46e5] hover:bg-[#342db6] w-fit"
+              onClick={handleClaimPrize}
+              disabled={
+                isWithdrawingPrize ||
+                !(
+                  currentDrawInfo?.completed &&
+                  currentDrawInfo?.winner === address
+                )
+              }
+            >
+              Claim Prize
+            </Button>
+          </div>
+        )}
 
         <TicketList />
       </div>

@@ -89,7 +89,7 @@ const CreateNewDraw = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4 justify-center">
         <Button
           className="border border-[#4f46e5] bg-transparent hover:bg-[#342db6] w-32 h-32 whitespace-normal flex flex-col"
           disabled={!address || isCreatingDraw}
