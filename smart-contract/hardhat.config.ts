@@ -1,7 +1,7 @@
-import {HardhatUserConfig} from "hardhat/config";
+import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
-import '@openzeppelin/hardhat-upgrades';
-import 'solidity-coverage';
+import "@openzeppelin/hardhat-upgrades";
+import "solidity-coverage";
 
 import * as dotenv from "dotenv";
 
@@ -13,18 +13,21 @@ const config: HardhatUserConfig = {
     settings: {
       optimizer: {
         enabled: true,
-        runs: 200
-      }
-    }
+        runs: 200,
+      },
+    },
   },
   etherscan: {
     apiKey: {
-      polygonAmoy: "1J27863SDJUGBI6EVCISJY69M44NC3KKEI",
-    }
+      polygonAmoy: process.env.POLYGON_API_KEY || "",
+      bscTestnet: process.env.BSC_API_KEY || "",
+    },
   },
   networks: {
     bscTestnet: {
-      url: process.env.BSC_RPC_URL || "https://data-seed-prebsc-1-s1.binance.org:8545",
+      url:
+        process.env.BSC_RPC_URL ||
+        "https://data-seed-prebsc-1-s1.binance.org:8545",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
     },
     amoyTestnet: {
@@ -32,13 +35,13 @@ const config: HardhatUserConfig = {
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
     },
     localhost: {
-      url: "http://127.0.0.1:8545"
+      url: "http://127.0.0.1:8545",
     },
     hardhat: {
       accounts: {
-        count: 25 // More than MAX_PARTICIPANTS + needed signers
-      }
-    }
+        count: 25, // More than MAX_PARTICIPANTS + needed signers
+      },
+    },
   },
 };
 
